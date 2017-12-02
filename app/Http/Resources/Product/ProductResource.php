@@ -17,8 +17,12 @@ class ProductResource extends Resource
         return [
             "name" => $this->name,
             "description" => $this->detail,
-            "price" => $this->price,
-            "stock" => $this->stock
+            "price" => $this->price < 3 ? "Tento produkt nieje na predaj" : $this->price,
+            "stock" => $this->stock == 0 ? "Nieje skladom" : $this->stock,
+            "rating" => $this->reviews->count() > 0 ? round($this->reviews->sum("star") / $this->reviews->count(),1) : "N/P",
+            "href" => [
+                "reviews" => route("reviews.index", $this->id)
+            ]
         ];
     }
 }
